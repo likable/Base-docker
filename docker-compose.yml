@@ -3,5 +3,9 @@ version: "3"
 services:
   nginx:
     image: nginx:latest
+    volumes:
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./:/var/www/
     ports:
       - "8080:80"
+    container_name: project-nginx
