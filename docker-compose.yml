@@ -8,9 +8,27 @@ services:
       - ./:/var/www
     ports:
       - "8080:80"
-    container_name: project-nginx
+    depends_on:
+      - php
+    container_name: projectname-nginx
 
   php:
-    image: php:8.0-fpm
+    image: php:8.1-fpm
     volumes:
       - ./:/var/www
+    depends_on:
+      - mysql
+    container_name: projectname-php
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - ./tmp/mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: projectname
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    container_name: projectname-mysql
